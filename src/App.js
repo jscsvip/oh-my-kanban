@@ -66,14 +66,14 @@ const KanbanCard = ({title,status}) => {
   )
 }
 // 看板添加状态
-const KanbanNewCard = () => {
+const KanbanNewCard = ({onSubmit}) => {
   const [title, setTitle] = useState('')
   const handleTitleChange = (e) => {
     setTitle(e.target.value)
   }
   const handleKeyDown = (e) => {
     if(e.key === 'Enter'){
-      // onSubmit(title)
+      onSubmit(title)
       console.log(title)
     }
   }
@@ -91,6 +91,10 @@ function App() {
   const handleAdd = () => {
     setShowAdd(true)
   }
+  const handleSubmit = (title) => {
+    todoList.unshift({title,status: new Date().toDateString()})
+    setShowAdd(false)
+  }
   return (
     <div className="App">
       <header className="App-header">
@@ -102,7 +106,7 @@ function App() {
             <h2>待处理 <button onClick={handleAdd} disabled={showAdd}>添加新卡片</button></h2>
             <ul>
             {
-              showAdd && <KanbanNewCard />
+              showAdd && <KanbanNewCard onSubmit={handleSubmit}/>
             }
             {/* {
               new Array(5).fill(0).map((item, index) => {
