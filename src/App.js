@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+import React,{useState} from 'react';
 
 const todoList = [
   {
@@ -76,6 +77,10 @@ const KanbanNewCard = () => {
   )
 }
 function App() {
+  const [showAdd, setShowAdd] = useState(false)
+  const handleAdd = () => {
+    setShowAdd(true)
+  }
   return (
     <div className="App">
       <header className="App-header">
@@ -84,9 +89,11 @@ function App() {
       </header>
       <main className='kanban-board'>
           <section className='kanban-column column-todo'>
-            <h2>待处理 <button>添加新卡片</button></h2>
+            <h2>待处理 <button onClick={handleAdd} disabled={showAdd}>添加新卡片</button></h2>
             <ul>
-            <KanbanNewCard />
+            {
+              showAdd && <KanbanNewCard />
+            }
             {/* {
               new Array(5).fill(0).map((item, index) => {
                 return <li className='kanban-card'>
