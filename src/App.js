@@ -2,36 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import React,{useState} from 'react';
 
-const todoList = [
-  {
-    title: '开发任务',
-    status: '22-05-22 18:15'
-  },
-  {
-    title: '开发任务',
-    status: '22-05-22 18:15'
-  },
-  {
-    title: '开发任务',
-    status: '22-05-22 18:15'
-  },
-  {
-    title: '开发任务',
-    status: '22-05-22 18:15'
-  },
-  {
-    title: '开发任务',
-    status: '22-05-22 18:15'
-  },
-  {
-    title: '开发任务',
-    status: '22-05-22 18:15'
-  },
-  {
-    title: '开发任务',
-    status: '22-05-22 18:15'
-  }
-]
+
 const ongoingList = [
   {
     title: '开发任务',
@@ -87,12 +58,29 @@ const KanbanNewCard = ({onSubmit}) => {
   )
 }
 function App() {
+  const [todoList, setTodoList] = useState([
+    
+      {
+        title: '开发任务-1',
+        status: '22-05-22 18:15'
+      },
+      {
+        title: '开发任务-2',
+        status: '22-05-22 18:15'
+      },
+      {
+        title: '开发任务-3',
+        status: '22-05-22 18:15'
+      }
+    
+  ])
   const [showAdd, setShowAdd] = useState(false)
   const handleAdd = () => {
     setShowAdd(true)
   }
   const handleSubmit = (title) => {
-    todoList.unshift({title,status: new Date().toDateString()})
+    setTodoList(currentTodoList=>[{title,status: new Date().toDateString()},...currentTodoList])
+    // todoList.unshift({title,status: new Date().toDateString()})
     // setShowAdd(false)
   }
   return (
@@ -120,7 +108,7 @@ function App() {
               return <KanbanCard title={item.title} status={item.status} />
              })} */}
              {todoList.map((item, index) => {
-              return <KanbanCard {...item} />
+              return <KanbanCard key={item.title} {...item} />
              })}
             </ul>
           </section>
