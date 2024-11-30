@@ -93,7 +93,7 @@ function App() {
   }
   const handleSubmit = (title) => {
     todoList.unshift({title,status: new Date().toDateString()})
-    setShowAdd(false)
+    // setShowAdd(false)
   }
   return (
     <div className="App">
