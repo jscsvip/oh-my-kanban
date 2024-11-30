@@ -67,11 +67,21 @@ const KanbanCard = ({title,status}) => {
 }
 // 看板添加状态
 const KanbanNewCard = () => {
+  const [title, setTitle] = useState('')
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value)
+  }
+  const handleKeyDown = (e) => {
+    if(e.key === 'Enter'){
+      // onSubmit(title)
+      console.log(title)
+    }
+  }
   return (
     <li className='kanban-card'>
       <h3>添加新卡片</h3>
       <div className='card-title'>
-        <input type="text" />
+        <input type="text" value={title} onChange={handleTitleChange} onKeyDown={handleKeyDown} n/>
       </div>
     </li>
   )
