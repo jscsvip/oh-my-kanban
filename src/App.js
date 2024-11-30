@@ -3,30 +3,7 @@ import './App.css';
 import React,{useState} from 'react';
 
 
-const ongoingList = [
-  {
-    title: '开发任务',
-    status: '22-05-22 18:15'
-  },
-  {
-    title: '开发任务',
-    status: '22-05-22 18:15'
-  }
-]
-const doneList = [
-  {
-    title: '开发任务',
-    status: '22-05-22 18:15'
-  },
-  {
-    title: '开发任务',
-    status: '22-05-22 18:15'
-  },
-  {
-    title: '开发任务',
-    status: '22-05-22 18:15'
-  }
-]
+
 // 看板组件
 const KanbanCard = ({title,status}) => {
   return (
@@ -74,6 +51,31 @@ function App() {
       }
     
   ])
+  const [ongoingList,setOngoingList] = useState([
+    {
+      title: '开发任务',
+      status: '22-05-22 18:15'
+    },
+    {
+      title: '开发任务',
+      status: '22-05-22 18:15'
+    }
+  ])
+  const [doneList,setDoneList] = useState([
+    {
+      title: '开发任务',
+      status: '22-05-22 18:15'
+    },
+    {
+      title: '开发任务',
+      status: '22-05-22 18:15'
+    },
+    {
+      title: '开发任务',
+      status: '22-05-22 18:15'
+    }
+  ])
+
   const [showAdd, setShowAdd] = useState(false)
   const handleAdd = () => {
     setShowAdd(true)
