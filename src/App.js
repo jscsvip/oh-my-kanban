@@ -42,11 +42,14 @@ const KanbanBoard = ({children}) => {
   )
 }
 
-const KanbanColumn = ({children,className}) => {
+const KanbanColumn = ({children,className,title}) => {
   const combinedClassName = `kanban-column ${className}`
   return (
     <section className={combinedClassName}>
-      {children}
+      <h2>{title}</h2>
+      <ul> 
+        {children}      
+      </ul>
     </section>
   )
 }
@@ -108,9 +111,13 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
       </header>
       <KanbanBoard>
-         <KanbanColumn className='column-todo'>
-           <h2>待处理 <button onClick={handleAdd} disabled={showAdd}>添加新卡片</button></h2>
-            <ul>
+         <KanbanColumn className='column-todo' title={
+          <>
+         待处理<button onClick={handleAdd}
+        disabled={showAdd}>&#8853; 添加新卡片</button>
+        </>
+      } >
+           
             {
               showAdd && <KanbanNewCard onSubmit={handleSubmit}/>
             }
@@ -128,23 +135,16 @@ function App() {
              {todoList.map((item, index) => {
               return <KanbanCard key={item.title} {...item} />
              })}
-            </ul>
          </KanbanColumn>
-         <KanbanColumn className='column-ongoing'>
-         <h2>进行中</h2>
-            <ul>
+         <KanbanColumn className='column-ongoing' title='进行中'>
             {ongoingList.map((item, index) => {
               return <KanbanCard  key={item.title}  {...item} />
              })}
-            </ul>
          </KanbanColumn>
-         <KanbanColumn className='column-done'>
-         <h2>已完成</h2>
-            <ul>
+         <KanbanColumn className='column-done' title='已完成'>
             {doneList.map((item, index) => {
               return <KanbanCard  key={item.title}  {...item} />
              })}
-            </ul>
          </KanbanColumn>
       </KanbanBoard>
     </div>
