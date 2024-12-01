@@ -1,7 +1,8 @@
+/** @jsxImportSource @emotion/react */
 import logo from './logo.svg';
 import './App.css';
 import React,{Children, useState} from 'react';
-
+import {css} from '@emotion/react';
 
 
 // 看板组件
@@ -36,7 +37,14 @@ const KanbanNewCard = ({onSubmit}) => {
 }
 const KanbanBoard = ({children}) => {
   return (
-    <main className='kanban-board'>
+    <main css={css`
+      flex: 10;
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+      margin: 0 1rem 1rem;
+      `
+    }>
       {children}
     </main>
   )
