@@ -8,7 +8,11 @@ import {css} from '@emotion/react';
 // 看板组件
 const KanbanCard = ({title,status}) => {
   return (
-    <li className='kanban-card'>
+    <li className='kanban-card' css={css`
+     &:hover {
+      box-shadow: 0 0.2rem 0.2rem rgba(0,0,0,0.2),inset 0 1px #fff;
+    }
+    `}>
       <div className='card-title'>{title}</div>
       <div className='card-status'>{status}</div>
     </li>
