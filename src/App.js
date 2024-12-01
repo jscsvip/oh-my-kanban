@@ -3,12 +3,21 @@ import logo from './logo.svg';
 import './App.css';
 import React,{Children, useState} from 'react';
 import {css} from '@emotion/react';
-
+const kanbanCardStyles = css`
+  margin-bottom: 1rem;;
+  padding: .6rem 1rem;
+  border: 1px solid gray;
+  border-radius: 1rem;
+  list-style: none;
+  background-color: rgba(255, 255, 255, 0.4);
+  text-align: left;
+`
 
 // 看板组件
 const KanbanCard = ({title,status}) => {
   return (
-    <li className='kanban-card' css={css`
+    <li css={css`
+      ${kanbanCardStyles}
      &:hover {
       box-shadow: 0 0.2rem 0.2rem rgba(0,0,0,0.2),inset 0 1px #fff;
     }
@@ -31,7 +40,9 @@ const KanbanNewCard = ({onSubmit}) => {
     }
   }
   return (
-    <li className='kanban-card'>
+    <li css={css`
+      ${kanbanCardStyles} 
+    `}>
       <h3>添加新卡片</h3>
       <div className='card-title'>
         <input type="text" value={title} onChange={handleTitleChange} onKeyDown={handleKeyDown} n/>
