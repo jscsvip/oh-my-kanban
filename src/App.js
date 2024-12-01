@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import logo from './logo.svg';
 import './App.css';
-import React,{Children, useState} from 'react';
+import React,{Children, useEffect, useState} from 'react';
 import {css} from '@emotion/react';
 const kanbanCardStyles = css`
   margin-bottom: 1rem;;
@@ -47,8 +47,35 @@ const COLUMN_BG_COLORS = {
   ongoing: '#ffe799',
   done: '#a9d0c7'
 }
+const MINUTE = 60 * 1000
+const HOUR = 60 * MINUTE
+const DAY = 24 * HOUR
+const UPDATE_INTERVAL = MINUTE
+
 // 看板组件
 const KanbanCard = ({title,status}) => {
+  const [displayTime, setDisplayTime] = useState(status)
+  useEffect(() => {
+    const updateDisplayTime = () => {
+      const timePassed = new Date() - new Date(status)
+      let relativeTime = '刚刚'
+      if(MINUTE <= timePassed && timePassed < HOUR){
+        relativeTime = Math.floor(timePassed / MINUTE) + '分钟前'
+      } else if(HOUR <= timePassed && timePassed < DAY){
+        relativeTime = Math.floor(timePassed / HOUR) + '小时前'
+      } else if(DAY <= timePassed){
+        relativeTime = Math.floor(timePassed / DAY) + '天前'
+      }
+      setDisplayTime(relativeTime)
+    }
+    const interval = setInterval(updateDisplayTime, UPDATE_INTERVAL)
+    updateDisplayTime()
+    return () => {
+      clearInterval(interval)
+    }
+  }, [status])
+
+
   return (
     <li css={css`
       ${kanbanCardStyles}
@@ -57,7 +84,7 @@ const KanbanCard = ({title,status}) => {
     }
     `}>
       <div className='card-title'>{title}</div>
-      <div className='card-status'>{status}</div>
+      <div className='card-status'>{displayTime}</div>
     </li>
   )
 }
@@ -117,40 +144,40 @@ function App() {
     
       {
         title: '开发任务-1',
-        status: '22-05-22 18:15'
+        status: '2024-12-1 18:15'
       },
       {
         title: '开发任务-2',
-        status: '22-05-22 18:15'
+        status: '2022-05-22 18:15'
       },
       {
         title: '开发任务-3',
-        status: '22-05-22 18:15'
+        status: '2022-05-22 18:15'
       }
     
   ])
   const [ongoingList,setOngoingList] = useState([
     {
       title: '开发任务1',
-      status: '22-05-22 18:15'
+      status: '2022-05-22 18:15'
     },
     {
       title: '开发任务2',
-      status: '22-05-22 18:15'
+      status: '2022-05-22 18:15'
     }
   ])
   const [doneList,setDoneList] = useState([
     {
       title: '开发任务1',
-      status: '22-05-22 18:15'
+      status: '2022-05-22 18:15'
     },
     {
       title: '开发任务2',
-      status: '22-05-22 18:15'
+      status: '2022-05-22 18:15'
     },
     {
       title: '开发任务3',
-      status: '22-05-22 18:15'
+      status: '2022-05-22 18:15'
     }
   ])
 
@@ -159,7 +186,8 @@ function App() {
     setShowAdd(true)
   }
   const handleSubmit = (title) => {
-    setTodoList(currentTodoList=>[{title,status: new Date().toDateString()},...currentTodoList])
+    console.log(new Date().toDateString())
+    setTodoList(currentTodoList=>[{title,status: new Date().toLocaleDateString() + new Date().toLocaleTimeString()},...currentTodoList])
     // todoList.unshift({title,status: new Date().toDateString()})
     setShowAdd(false)
   }
@@ -184,7 +212,7 @@ function App() {
               new Array(5).fill(0).map((item, index) => {
                 return <li className='kanban-card'>
                 <div className='card-title'>开发任务</div>
-                <div className='card-status'>22-05-22 18:15</div>
+                <div className='card-status'>2022-05-22 18:15</div>
               </li>
               })
             } */}
