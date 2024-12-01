@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import React,{Children, useEffect, useState, useRef} from 'react';
 import {css} from '@emotion/react';
+const DATA_STORE_KEY = 'kanban-data-store'
 const kanbanCardStyles = css`
   margin-bottom: 1rem;;
   padding: .6rem 1rem;
@@ -11,6 +12,16 @@ const kanbanCardStyles = css`
   list-style: none;
   background-color: rgba(255, 255, 255, 0.4);
   text-align: left;
+`
+const buttonStyles = css `
+  float: right;
+  margin-top: .2rem;
+  padding: .2rem .5rem;
+  border: 0;
+  border-radius: 1rem;
+  height: 1.8rem;
+  line-height: 1rem;
+  font-size: 1rem;
 `
 const KanbanColumnStyles = css`
   flex: 1 1;
@@ -24,14 +35,7 @@ const KanbanColumnStyles = css`
       border-bottom: 1px solid gray;
     }
   &> h2 > button {
-    float: right;
-    margin-top: .2rem;
-    padding: .2rem .5rem;
-    border: 0;
-    border-radius: 1rem;
-    height: 1.8rem;
-    line-height: 1rem;
-    font-size: 1rem;
+    ${buttonStyles}
   }
   &> ul{
     flex: 1;
@@ -196,10 +200,28 @@ function App() {
     // todoList.unshift({title,status: new Date().toDateString()})
     setShowAdd(false)
   }
+  const handleSaveAll = () => {
+    console.log('保存所有卡片')
+    const data = JSON.stringify({todoList,ongoingList,doneList})
+    localStorage.setItem(DATA_STORE_KEY,data)
+  }
+  useEffect(() => {
+    const data = localStorage.getItem(DATA_STORE_KEY)
+// 模拟异步加载数据
+    setTimeout(() => {
+      if(data){
+        const {todoList,ongoingList,doneList} = JSON.parse(data)
+        setTodoList(todoList)
+        setOngoingList(ongoingList)
+        setDoneList(doneList)
+      }
+  
+    }, 1000);
+  }, [])
   return (
     <div className="App">
       <header className="App-header">
-        <h1>我的看板</h1>
+        <h1 style={{display:'flex',alignItems:'center'}}>我的看板<button onClick={handleSaveAll} css={buttonStyles}>保存所有卡片</button></h1>
         <img src={logo} className="App-logo" alt="logo" />
       </header>
       <KanbanBoard>
