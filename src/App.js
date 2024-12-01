@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import logo from './logo.svg';
 import './App.css';
-import React,{Children, useEffect, useState} from 'react';
+import React,{Children, useEffect, useState, useRef} from 'react';
 import {css} from '@emotion/react';
 const kanbanCardStyles = css`
   margin-bottom: 1rem;;
@@ -58,6 +58,7 @@ const KanbanCard = ({title,status}) => {
   useEffect(() => {
     const updateDisplayTime = () => {
       const timePassed = new Date() - new Date(status)
+      console.log(timePassed)
       let relativeTime = '刚刚'
       if(MINUTE <= timePassed && timePassed < HOUR){
         relativeTime = Math.floor(timePassed / MINUTE) + '分钟前'
@@ -91,6 +92,10 @@ const KanbanCard = ({title,status}) => {
 // 看板添加状态
 const KanbanNewCard = ({onSubmit}) => {
   const [title, setTitle] = useState('')
+  const inputElem = useRef(null)
+  useEffect(() => {
+    inputElem.current.focus()
+  }, [])
   const handleTitleChange = (e) => {
     setTitle(e.target.value)
   }
@@ -106,7 +111,7 @@ const KanbanNewCard = ({onSubmit}) => {
     `}>
       <h3>添加新卡片</h3>
       <div className='card-title'>
-        <input type="text" value={title} onChange={handleTitleChange} onKeyDown={handleKeyDown} n/>
+        <input type="text" value={title} onChange={handleTitleChange} onKeyDown={handleKeyDown} ref={inputElem}/>
       </div>
     </li>
   )
@@ -186,8 +191,8 @@ function App() {
     setShowAdd(true)
   }
   const handleSubmit = (title) => {
-    console.log(new Date().toDateString())
-    setTodoList(currentTodoList=>[{title,status: new Date().toLocaleDateString() + new Date().toLocaleTimeString()},...currentTodoList])
+    console.log(new Date().toLocaleString())
+    setTodoList(currentTodoList=>[{title,status: new Date().toLocaleString() },...currentTodoList])
     // todoList.unshift({title,status: new Date().toDateString()})
     setShowAdd(false)
   }
