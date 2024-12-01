@@ -12,7 +12,35 @@ const kanbanCardStyles = css`
   background-color: rgba(255, 255, 255, 0.4);
   text-align: left;
 `
-
+const KanbanColumnStyles = css`
+  flex: 1 1;
+  display: flex;
+  border: 1px solid gray;
+  border-radius: 1rem;
+  flex-direction: column;
+  & > h2{
+      margin: 0.6rem 1rem;
+      padding-bottom: .6rem;
+      border-bottom: 1px solid gray;
+    }
+  &> h2 > button {
+    float: right;
+    margin-top: .2rem;
+    padding: .2rem .5rem;
+    border: 0;
+    border-radius: 1rem;
+    height: 1.8rem;
+    line-height: 1rem;
+    font-size: 1rem;
+  }
+  &> ul{
+    flex: 1;
+    flex-basis: 0;
+    margin: 1rem;
+    padding: 0;
+    overflow: auto;
+  }
+`
 // 看板组件
 const KanbanCard = ({title,status}) => {
   return (
@@ -66,9 +94,12 @@ const KanbanBoard = ({children}) => {
 }
 
 const KanbanColumn = ({children,className,title}) => {
-  const combinedClassName = `kanban-column ${className}`
+  const combinedClassName = `${className}`
   return (
-    <section className={combinedClassName}>
+    <section className={combinedClassName} css={css`
+    ${KanbanColumnStyles}
+    
+    `}>
       <h2>{title}</h2>
       <ul> 
         {children}      
