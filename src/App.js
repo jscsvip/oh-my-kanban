@@ -47,6 +47,7 @@ const KanbanColumnStyles = css`
 `
 
 const COLUMN_BG_COLORS = {
+  loading: '#e3e3e3',
   todo: '#c9af',
   ongoing: '#ffe799',
   done: '#a9d0c7'
@@ -165,6 +166,7 @@ function App() {
       }
     
   ])
+  const [loading, setLoading] = useState(true)
   const [ongoingList,setOngoingList] = useState([
     {
       title: '开发任务1',
@@ -205,6 +207,7 @@ function App() {
     const data = JSON.stringify({todoList,ongoingList,doneList})
     localStorage.setItem(DATA_STORE_KEY,data)
   }
+  // 初次加载
   useEffect(() => {
     const data = localStorage.getItem(DATA_STORE_KEY)
 // 模拟异步加载数据
@@ -215,7 +218,7 @@ function App() {
         setOngoingList(ongoingList)
         setDoneList(doneList)
       }
-  
+      setLoading(false)
     }, 1000);
   }, [])
   return (
@@ -225,7 +228,7 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
       </header>
       <KanbanBoard>
-         <KanbanColumn bgColor={COLUMN_BG_COLORS.todo} title={
+         {loading?(<KanbanColumn bgColor={COLUMN_BG_COLORS.loading} title='加载中...'></KanbanColumn>):(<><KanbanColumn bgColor={COLUMN_BG_COLORS.todo} title={
           <>
          待处理<button onClick={handleAdd}
         disabled={showAdd}>&#8853; 添加新卡片</button>
@@ -260,6 +263,7 @@ function App() {
               return <KanbanCard  key={item.title}  {...item} />
              })}
          </KanbanColumn>
+         </>)}
       </KanbanBoard>
     </div>
   );
