@@ -41,6 +41,12 @@ const KanbanColumnStyles = css`
     overflow: auto;
   }
 `
+
+const COLUMN_BG_COLORS = {
+  todo: '#c9af',
+  ongoing: '#ffe799',
+  done: '#a9d0c7'
+}
 // 看板组件
 const KanbanCard = ({title,status}) => {
   return (
@@ -93,12 +99,11 @@ const KanbanBoard = ({children}) => {
   )
 }
 
-const KanbanColumn = ({children,className,title}) => {
-  const combinedClassName = `${className}`
+const KanbanColumn = ({children,bgColor,title}) => {
   return (
-    <section className={combinedClassName} css={css`
+    <section css={css`
     ${KanbanColumnStyles}
-    
+    background-color: ${bgColor};
     `}>
       <h2>{title}</h2>
       <ul> 
@@ -165,7 +170,7 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
       </header>
       <KanbanBoard>
-         <KanbanColumn className='column-todo' title={
+         <KanbanColumn bgColor={COLUMN_BG_COLORS.todo} title={
           <>
          待处理<button onClick={handleAdd}
         disabled={showAdd}>&#8853; 添加新卡片</button>
@@ -190,12 +195,12 @@ function App() {
               return <KanbanCard key={item.title} {...item} />
              })}
          </KanbanColumn>
-         <KanbanColumn className='column-ongoing' title='进行中'>
+         <KanbanColumn bgColor={COLUMN_BG_COLORS.ongoing} title='进行中'>
             {ongoingList.map((item, index) => {
               return <KanbanCard  key={item.title}  {...item} />
              })}
          </KanbanColumn>
-         <KanbanColumn className='column-done' title='已完成'>
+         <KanbanColumn bgColor={COLUMN_BG_COLORS.done} title='已完成'>
             {doneList.map((item, index) => {
               return <KanbanCard  key={item.title}  {...item} />
              })}

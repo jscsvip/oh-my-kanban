@@ -66,7 +66,7 @@
   border-bottom: 1px solid gray;
 } */
 
-.column-todo{
+/* .column-todo{
   background-color: #c9af;
 }
 .column-ongoing{
@@ -74,7 +74,7 @@
 }
 .column-done{
   background-color: #a9d0c7;
-}
+} */
 
 /* .kanban-column > ul{
   flex: 1;
