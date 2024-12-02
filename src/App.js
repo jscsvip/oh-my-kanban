@@ -1,15 +1,19 @@
 /** @jsxImportSource @emotion/react */
 import logo from './logo.svg';
 import './App.css';
-import React,{Children, useEffect, useState, useRef} from 'react';
+import React,{Children, useEffect, useState} from 'react';
 import {css} from '@emotion/react';
+import KanbanBoard from './KanbanBoard';
+import KanbanCard from './KanbanCard';
+import KanbanNewCard from './KanbanNewCard';
+import KanbanColumn from './KanbanColumn';
 const DATA_STORE_KEY = 'kanban-data-store'
 const COLUMN_KEY_TODO = 'todo'
 const COLUMN_KEY_ONGOING = 'ongoing'
 const COLUMN_KEY_DONE = 'done'
 
 
-const kanbanCardStyles = css`
+export const kanbanCardStyles = css`
   margin-bottom: 1rem;;
   padding: .6rem 1rem;
   border: 1px solid gray;
@@ -28,7 +32,7 @@ const buttonStyles = css `
   line-height: 1rem;
   font-size: 1rem;
 `
-const KanbanColumnStyles = css`
+export const KanbanColumnStyles = css`
   flex: 1 1;
   display: flex;
   border: 1px solid gray;
@@ -57,117 +61,11 @@ const COLUMN_BG_COLORS = {
   ongoing: '#ffe799',
   done: '#a9d0c7'
 }
-const MINUTE = 60 * 1000
-const HOUR = 60 * MINUTE
-const DAY = 24 * HOUR
-const UPDATE_INTERVAL = MINUTE
+export const MINUTE = 60 * 1000
+export const HOUR = 60 * MINUTE
+export const DAY = 24 * HOUR
+export const UPDATE_INTERVAL = MINUTE
 
-// 看板组件
-const KanbanCard = ({title,status, onDragStart}) => {
-  const [displayTime, setDisplayTime] = useState(status)
-  useEffect(() => {
-    const updateDisplayTime = () => {
-      const timePassed = new Date() - new Date(status)
-      console.log(timePassed)
-      let relativeTime = '刚刚'
-      if(MINUTE <= timePassed && timePassed < HOUR){
-        relativeTime = Math.floor(timePassed / MINUTE) + '分钟前'
-      } else if(HOUR <= timePassed && timePassed < DAY){
-        relativeTime = Math.floor(timePassed / HOUR) + '小时前'
-      } else if(DAY <= timePassed){
-        relativeTime = Math.floor(timePassed / DAY) + '天前'
-      }
-      setDisplayTime(relativeTime)
-    }
-    const interval = setInterval(updateDisplayTime, UPDATE_INTERVAL)
-    updateDisplayTime()
-    return () => {
-      clearInterval(interval)
-    }
-  }, [status])
-
-  const handleDragStart = (e) => {
-    e.dataTransfer.effectAllowed = 'move'
-    e.dataTransfer.setData('text/plain', title)
-    onDragStart&&onDragStart(e)
-  }
-  return (
-    <li css={css`
-      ${kanbanCardStyles}
-     &:hover {
-      box-shadow: 0 0.2rem 0.2rem rgba(0,0,0,0.2),inset 0 1px #fff;
-    }
-    `}
-    draggable
-    onDragStart={handleDragStart}
-    >
-      <div className='card-title'>{title}</div>
-      <div className='card-status'>{displayTime}</div>
-    </li>
-  )
-}
-// 看板添加状态
-const KanbanNewCard = ({onSubmit}) => {
-  const [title, setTitle] = useState('')
-  const inputElem = useRef(null)
-  useEffect(() => {
-    inputElem.current.focus()
-  }, [])
-  const handleTitleChange = (e) => {
-    setTitle(e.target.value)
-  }
-  const handleKeyDown = (e) => {
-    if(e.key === 'Enter'){
-      onSubmit(title)
-      console.log(title)
-    }
-  }
-  return (
-    <li css={css`
-      ${kanbanCardStyles} 
-    `}>
-      <h3>添加新卡片</h3>
-      <div className='card-title'>
-        <input type="text" value={title} onChange={handleTitleChange} onKeyDown={handleKeyDown} ref={inputElem}/>
-      </div>
-    </li>
-  )
-}
-const KanbanBoard = ({children}) => {
-  return (
-    <main css={css`
-      flex: 10;
-      display: flex;
-      flex-direction: row;
-      gap: 1rem;
-      margin: 0 1rem 1rem;
-      `
-    }>
-      {children}
-    </main>
-  )
-}
-
-const KanbanColumn = ({children,bgColor,title,setIsDragSource=()=>{},setIsDragTarget=()=>{},onDrop}) => {
-  return (
-    <section css={css`
-    ${KanbanColumnStyles}
-    background-color: ${bgColor};
-    `}
-    onDragStart={(e) => {setIsDragSource(true)}}
-    onDragOver={(e) => {e.preventDefault();e.dataTransfer.dropEffect = 'move';setIsDragTarget(true)}}
-    onDragLeave={(e) => {e.preventDefault();e.dataTransfer.dropEffect = 'none';setIsDragTarget(false)}}
-    onDrop={(e) => {e.preventDefault();onDrop&&onDrop(e)}}
-    onDragEnd={(e) => {e.preventDefault();setIsDragSource(false);setIsDragTarget(false)}}
-
-    >
-      <h2>{title}</h2>
-      <ul> 
-        {children}      
-      </ul>
-    </section>
-  )
-}
 function App() {
   const [todoList, setTodoList] = useState([
     
@@ -225,6 +123,7 @@ function App() {
     console.log('保存所有卡片')
     const data = JSON.stringify({todoList,ongoingList,doneList})
     localStorage.setItem(DATA_STORE_KEY,data)
+    alert('保存成功')
   }
   const [draggedItem, setDraggedItem] = useState(null)
   const [dragSource, setDragSource] = useState(null)
