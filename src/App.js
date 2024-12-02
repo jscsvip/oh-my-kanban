@@ -13,15 +13,7 @@ const COLUMN_KEY_ONGOING = 'ongoing'
 const COLUMN_KEY_DONE = 'done'
 
 
-export const kanbanCardStyles = css`
-  margin-bottom: 1rem;;
-  padding: .6rem 1rem;
-  border: 1px solid gray;
-  border-radius: 1rem;
-  list-style: none;
-  background-color: rgba(255, 255, 255, 0.4);
-  text-align: left;
-`
+
 const buttonStyles = css `
   float: right;
   margin-top: .2rem;
@@ -32,28 +24,7 @@ const buttonStyles = css `
   line-height: 1rem;
   font-size: 1rem;
 `
-export const KanbanColumnStyles = css`
-  flex: 1 1;
-  display: flex;
-  border: 1px solid gray;
-  border-radius: 1rem;
-  flex-direction: column;
-  & > h2{
-      margin: 0.6rem 1rem;
-      padding-bottom: .6rem;
-      border-bottom: 1px solid gray;
-    }
-  &> h2 > button {
-    ${buttonStyles}
-  }
-  &> ul{
-    flex: 1;
-    flex-basis: 0;
-    margin: 1rem;
-    padding: 0;
-    overflow: auto;
-  }
-`
+
 
 const COLUMN_BG_COLORS = {
   loading: '#e3e3e3',
@@ -161,7 +132,10 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1 style={{display:'flex',alignItems:'center'}}>我的看板<button onClick={handleSaveAll} css={buttonStyles}>保存所有卡片</button></h1>
+        <h1 style={{display:'flex',alignItems:'center'}}>我的看板<button onClick={handleSaveAll} css={css`
+        ${buttonStyles}
+        margin-left: 10px;
+        `}>保存所有卡片</button></h1>
         <img src={logo} className="App-logo" alt="logo" />
       </header>
       <KanbanBoard>

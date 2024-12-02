@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect, useState, useRef } from 'react';
 import { css } from '@emotion/react';
-import { kanbanCardStyles } from './App';
+import { kanbanCardStyles } from './KanbanCard';
 
 // 看板添加状态
 export default function KanbanNewCard({ onSubmit }) {

@@ -1,8 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect, useState } from 'react';
 import { css } from '@emotion/react';
-import { MINUTE, HOUR, DAY, UPDATE_INTERVAL, kanbanCardStyles } from './App';
-
+import { MINUTE, HOUR, DAY, UPDATE_INTERVAL } from './App';
+export const kanbanCardStyles = css`
+  margin-bottom: 1rem;;
+  padding: .6rem 1rem;
+  border: 1px solid gray;
+  border-radius: 1rem;
+  list-style: none;
+  background-color: rgba(255, 255, 255, 0.4);
+  text-align: left;
+`
 // 看板组件
 export default function KanbanCard({ title, status, onDragStart }) {
   const [displayTime, setDisplayTime] = useState(status);
