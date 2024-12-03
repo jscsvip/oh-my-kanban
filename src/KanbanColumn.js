@@ -52,12 +52,12 @@ export default function KanbanColumn({
   const handleAdd = () => {
     setShowAdd(true);
   };
-  const handleSubmit = (title) => {
+  const handleSubmit = (newCard) => {
     // setTodoList((currentTodoList) => [
     //   { title, status: new Date().toLocaleString() },
     //   ...currentTodoList,
     // ]);
-    onAdd && onAdd(title); // 执行属性传过来的回调函数
+    onAdd && onAdd(newCard); // 执行属性传过来的回调函数
     setShowAdd(false);
   };
   return (

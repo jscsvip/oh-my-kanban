@@ -73,12 +73,8 @@ function App() {
     },
   ]);
 
-  const handleSubmit = (title) => {
-    setTodoList((currentTodoList) => [
-      { title, status: new Date().toLocaleString() },
-      ...currentTodoList,
-    ]);
-    // todoList.unshift({title,status: new Date().toDateString()})
+  const handleAdd = (newCard) => {
+    setTodoList((currentTodoList) => [newCard, ...currentTodoList]);
   };
   const handleSaveAll = () => {
     console.log("保存所有卡片");
@@ -163,11 +159,9 @@ function App() {
               }
               onDrop={handleDrop}
               cardList={todoList}
-              onAdd={handleSubmit}
+              onAdd={handleAdd}
               canAddNew={true}
-            >
-              {/* {showAdd && <KanbanNewCard onSubmit={handleSubmit} />} */}
-            </KanbanColumn>
+            ></KanbanColumn>
             <KanbanColumn
               bgColor={COLUMN_BG_COLORS.ongoing}
               title="进行中"
