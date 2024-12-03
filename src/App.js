@@ -4,6 +4,7 @@ import "./App.css";
 import React, { Children, useEffect, useState } from "react";
 import AdminContext from "./context/AdminContext";
 import { css } from "@emotion/react";
+import { useImmer } from 'use-immer';
 import KanbanBoard, {
   COLUMN_KEY_DONE,
   COLUMN_KEY_ONGOING,
@@ -23,7 +24,7 @@ const buttonStyles = css`
 `;
 
 function App() {
-  const [todoList, setTodoList] = useState([
+  const [todoList, setTodoList] = useImmer([
     {
       title: "开发任务-1",
       status: "2024-12-1 18:15",
@@ -37,7 +38,7 @@ function App() {
       status: "2022-05-22 18:15",
     },
   ]);
-  const [ongoingList, setOngoingList] = useState([
+  const [ongoingList, setOngoingList] = useImmer([
     {
       title: "开发任务1",
       status: "2022-05-22 18:15",
@@ -47,7 +48,7 @@ function App() {
       status: "2022-05-22 18:15",
     },
   ]);
-  const [doneList, setDoneList] = useState([
+  const [doneList, setDoneList] = useImmer([
     {
       title: "开发任务1",
       status: "2022-05-22 18:15",
@@ -68,7 +69,10 @@ function App() {
     [COLUMN_KEY_DONE]: setDoneList,
   };
   const handleAdd = (column, newCard) => {
-    updaters[column]((currentStat) => [newCard, ...currentStat]);
+    // 只要涉及到state修改必须返回新的对象,这里用了immer可以使用unshift修改自身,filter本身就返回新数组,所以不用扩展运算符操作
+    updaters[column]((currentStat) => {
+      currentStat.unshift(newCard)
+    });
   };
   const handleRemove = (column, cardToRemove) => {
     updaters[column]((currentStat) =>
