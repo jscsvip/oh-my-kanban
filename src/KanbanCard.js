@@ -1,7 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { css } from "@emotion/react";
 import { MINUTE, HOUR, DAY, UPDATE_INTERVAL } from "./KanbanBoard";
+import AdminContext from "./context/AdminContext";
+
 export const kanbanCardStyles = css`
   margin-bottom: 1rem;
   padding: 0.6rem 1rem;
@@ -12,8 +14,9 @@ export const kanbanCardStyles = css`
   text-align: left;
 `;
 // 看板组件
-export default function KanbanCard({ title, status, onDragStart }) {
+export default function KanbanCard({ title, status, onDragStart, onRemove }) {
   const [displayTime, setDisplayTime] = useState(status);
+  const isAdmin = useContext(AdminContext);
   useEffect(() => {
     const updateDisplayTime = () => {
       const timePassed = new Date() - new Date(status);
@@ -52,7 +55,12 @@ export default function KanbanCard({ title, status, onDragStart }) {
       onDragStart={handleDragStart}
     >
       <div className="card-title">{title}</div>
-      <div className="card-status">{displayTime}</div>
+      <div className="card-status">
+        {displayTime}
+        {isAdmin && onRemove && (
+          <button onClick={() => onRemove({ title })}>X</button>
+        )}
+      </div>
     </li>
   );
 }

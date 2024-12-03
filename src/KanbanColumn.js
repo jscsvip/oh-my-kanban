@@ -47,6 +47,7 @@ export default function KanbanColumn({
   setDraggedItem,
   canAddNew = false,
   onAdd,
+  onRemove,
 }) {
   const [showAdd, setShowAdd] = useState(false);
   const handleAdd = () => {
@@ -106,6 +107,7 @@ export default function KanbanColumn({
               key={item.title}
               {...item}
               onDragStart={() => setDraggedItem(item)}
+              onRemove={onRemove}
             />
           );
         })}

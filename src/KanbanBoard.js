@@ -88,6 +88,7 @@ export default function KanbanBoard({
             onDrop={handleDrop}
             cardList={todoList}
             onAdd={onAdd.bind(null, COLUMN_KEY_TODO)}
+            onRemove={onRemove.bind(null, COLUMN_KEY_TODO)}
             canAddNew={true}
           ></KanbanColumn>
           <KanbanColumn
@@ -101,6 +102,7 @@ export default function KanbanBoard({
               setDragTarget(isDragSource ? COLUMN_KEY_ONGOING : null)
             }
             onDrop={handleDrop}
+            onRemove={onRemove.bind(null, COLUMN_KEY_ONGOING)}
             cardList={ongoingList}
           ></KanbanColumn>
           <KanbanColumn
@@ -115,6 +117,7 @@ export default function KanbanBoard({
             }
             onDrop={handleDrop}
             cardList={doneList}
+            onRemove={onRemove.bind(null, COLUMN_KEY_DONE)}
           ></KanbanColumn>
         </>
       )}
