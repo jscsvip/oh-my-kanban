@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect, useState } from "react";
 import { css } from "@emotion/react";
-import { MINUTE, HOUR, DAY, UPDATE_INTERVAL } from "./App";
+import { MINUTE, HOUR, DAY, UPDATE_INTERVAL } from "./KanbanBoard";
 export const kanbanCardStyles = css`
   margin-bottom: 1rem;
   padding: 0.6rem 1rem;

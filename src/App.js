@@ -3,12 +3,12 @@ import logo from "./logo.svg";
 import "./App.css";
 import React, { Children, useEffect, useState } from "react";
 import { css } from "@emotion/react";
-import KanbanBoard from "./KanbanBoard";
-import KanbanColumn from "./KanbanColumn";
+import KanbanBoard, {
+  COLUMN_KEY_DONE,
+  COLUMN_KEY_ONGOING,
+  COLUMN_KEY_TODO,
+} from "./KanbanBoard";
 const DATA_STORE_KEY = "kanban-data-store";
-const COLUMN_KEY_TODO = "todo";
-const COLUMN_KEY_ONGOING = "ongoing";
-const COLUMN_KEY_DONE = "done";
 
 const buttonStyles = css`
   float: right;
@@ -20,17 +20,6 @@ const buttonStyles = css`
   line-height: 1rem;
   font-size: 1rem;
 `;
-
-const COLUMN_BG_COLORS = {
-  loading: "#e3e3e3",
-  todo: "#c9af",
-  ongoing: "#ffe799",
-  done: "#a9d0c7",
-};
-export const MINUTE = 60 * 1000;
-export const HOUR = 60 * MINUTE;
-export const DAY = 24 * HOUR;
-export const UPDATE_INTERVAL = MINUTE;
 
 function App() {
   const [todoList, setTodoList] = useState([
@@ -47,7 +36,6 @@ function App() {
       status: "2022-05-22 18:15",
     },
   ]);
-  const [loading, setLoading] = useState(true);
   const [ongoingList, setOngoingList] = useState([
     {
       title: "开发任务1",
@@ -72,9 +60,19 @@ function App() {
       status: "2022-05-22 18:15",
     },
   ]);
-
-  const handleAdd = (newCard) => {
-    setTodoList((currentTodoList) => [newCard, ...currentTodoList]);
+  const [loading, setLoading] = useState(true);
+  const updaters = {
+    [COLUMN_KEY_TODO]: setTodoList,
+    [COLUMN_KEY_ONGOING]: setOngoingList,
+    [COLUMN_KEY_DONE]: setDoneList,
+  };
+  const handleAdd = (column, newCard) => {
+    updaters[column]((currentStat) => [newCard, ...currentStat]);
+  };
+  const handleRemove = (column, cardToRemove) => {
+    updaters[column]((currentStat) =>
+      currentStat.filter((item) => !Object.is(item, cardToRemove))
+    );
   };
   const handleSaveAll = () => {
     console.log("保存所有卡片");
@@ -82,32 +80,7 @@ function App() {
     localStorage.setItem(DATA_STORE_KEY, data);
     alert("保存成功");
   };
-  const [draggedItem, setDraggedItem] = useState(null);
-  const [dragSource, setDragSource] = useState(null);
-  const [dragTarget, setDragTarget] = useState(null);
-  const handleDrop = (e) => {
-    if (
-      !draggedItem ||
-      !dragSource ||
-      !dragTarget ||
-      dragSource === dragTarget
-    ) {
-      return;
-    }
-    const updaters = {
-      [COLUMN_KEY_TODO]: setTodoList,
-      [COLUMN_KEY_ONGOING]: setOngoingList,
-      [COLUMN_KEY_DONE]: setDoneList,
-    };
-    if (dragSource) {
-      updaters[dragSource]((currentList) =>
-        currentList.filter((item) => item.title !== draggedItem.title)
-      );
-    }
-    if (dragTarget) {
-      updaters[dragTarget]((currentList) => [draggedItem, ...currentList]);
-    }
-  };
+
   // 初次加载
   useEffect(() => {
     const data = localStorage.getItem(DATA_STORE_KEY);
@@ -139,58 +112,14 @@ function App() {
         </h1>
         <img src={logo} className="App-logo" alt="logo" />
       </header>
-      <KanbanBoard>
-        {loading ? (
-          <KanbanColumn
-            bgColor={COLUMN_BG_COLORS.loading}
-            title="加载中..."
-          ></KanbanColumn>
-        ) : (
-          <>
-            <KanbanColumn
-              bgColor={COLUMN_BG_COLORS.todo}
-              title="待处理"
-              setDraggedItem={setDraggedItem}
-              setIsDragSource={(isDragSource) =>
-                setDragSource(isDragSource ? COLUMN_KEY_TODO : null)
-              }
-              setIsDragTarget={(isDragSource) =>
-                setDragTarget(isDragSource ? COLUMN_KEY_TODO : null)
-              }
-              onDrop={handleDrop}
-              cardList={todoList}
-              onAdd={handleAdd}
-              canAddNew={true}
-            ></KanbanColumn>
-            <KanbanColumn
-              bgColor={COLUMN_BG_COLORS.ongoing}
-              title="进行中"
-              setDraggedItem={setDraggedItem}
-              setIsDragSource={(isDragSource) =>
-                setDragSource(isDragSource ? COLUMN_KEY_ONGOING : null)
-              }
-              setIsDragTarget={(isDragSource) =>
-                setDragTarget(isDragSource ? COLUMN_KEY_ONGOING : null)
-              }
-              onDrop={handleDrop}
-              cardList={ongoingList}
-            ></KanbanColumn>
-            <KanbanColumn
-              bgColor={COLUMN_BG_COLORS.done}
-              title="已完成"
-              setDraggedItem={setDraggedItem}
-              setIsDragSource={(isDragSource) =>
-                setDragSource(isDragSource ? COLUMN_KEY_DONE : null)
-              }
-              setIsDragTarget={(isDragSource) =>
-                setDragTarget(isDragSource ? COLUMN_KEY_DONE : null)
-              }
-              onDrop={handleDrop}
-              cardList={doneList}
-            ></KanbanColumn>
-          </>
-        )}
-      </KanbanBoard>
+      <KanbanBoard
+        loading={loading}
+        todoList={todoList}
+        ongoingList={ongoingList}
+        doneList={doneList}
+        onAdd={handleAdd}
+        onRemove={handleRemove}
+      ></KanbanBoard>
     </div>
   );
 }
