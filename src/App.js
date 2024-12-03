@@ -169,6 +169,7 @@ function App() {
                   </button>
                 </>
               }
+              setDraggedItem={setDraggedItem}
               setIsDragSource={(isDragSource) =>
                 setDragSource(isDragSource ? COLUMN_KEY_TODO : null)
               }
@@ -176,22 +177,14 @@ function App() {
                 setDragTarget(isDragSource ? COLUMN_KEY_TODO : null)
               }
               onDrop={handleDrop}
+              cardList={todoList}
             >
               {showAdd && <KanbanNewCard onSubmit={handleSubmit} />}
-              
-              {todoList.map((item, index) => {
-                return (
-                  <KanbanCard
-                    key={item.title}
-                    {...item}
-                    onDragStart={() => setDraggedItem(item)}
-                  />
-                );
-              })}
             </KanbanColumn>
             <KanbanColumn
               bgColor={COLUMN_BG_COLORS.ongoing}
               title="进行中"
+              setDraggedItem={setDraggedItem}
               setIsDragSource={(isDragSource) =>
                 setDragSource(isDragSource ? COLUMN_KEY_ONGOING : null)
               }
@@ -199,20 +192,13 @@ function App() {
                 setDragTarget(isDragSource ? COLUMN_KEY_ONGOING : null)
               }
               onDrop={handleDrop}
+              cardList={ongoingList}
             >
-              {ongoingList.map((item, index) => {
-                return (
-                  <KanbanCard
-                    key={item.title}
-                    {...item}
-                    onDragStart={() => setDraggedItem(item)}
-                  />
-                );
-              })}
             </KanbanColumn>
             <KanbanColumn
               bgColor={COLUMN_BG_COLORS.done}
               title="已完成"
+              setDraggedItem={setDraggedItem}
               setIsDragSource={(isDragSource) =>
                 setDragSource(isDragSource ? COLUMN_KEY_DONE : null)
               }
@@ -220,16 +206,9 @@ function App() {
                 setDragTarget(isDragSource ? COLUMN_KEY_DONE : null)
               }
               onDrop={handleDrop}
+              cardList={doneList}
             >
-              {doneList.map((item, index) => {
-                return (
-                  <KanbanCard
-                    key={item.title}
-                    {...item}
-                    onDragStart={() => setDraggedItem(item)}
-                  />
-                );
-              })}
+              
             </KanbanColumn>
           </>
         )}
