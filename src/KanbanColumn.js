@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import React from "react";
+import React, { useState } from "react";
 import { css } from "@emotion/react";
-import KanbanCard from './KanbanCard';
-
+import KanbanCard from "./KanbanCard";
+import KanbanNewCard from "./KanbanNewCard";
 
 // import { buttonStyles } from './App';
 const buttonStyles = css`
@@ -38,15 +38,28 @@ export const KanbanColumnStyles = css`
   }
 `;
 export default function KanbanColumn({
-  children,
   bgColor,
   title,
   setIsDragSource = () => {},
   setIsDragTarget = () => {},
   onDrop,
-  cardList=[],
-  setDraggedItem
+  cardList = [],
+  setDraggedItem,
+  canAddNew = false,
+  onAdd,
 }) {
+  const [showAdd, setShowAdd] = useState(false);
+  const handleAdd = () => {
+    setShowAdd(true);
+  };
+  const handleSubmit = (title) => {
+    // setTodoList((currentTodoList) => [
+    //   { title, status: new Date().toLocaleString() },
+    //   ...currentTodoList,
+    // ]);
+    onAdd && onAdd(title); // 执行属性传过来的回调函数
+    setShowAdd(false);
+  };
   return (
     <section
       css={css`
@@ -76,9 +89,16 @@ export default function KanbanColumn({
         setIsDragTarget(false);
       }}
     >
-      <h2>{title}</h2>
+      <h2>
+        {title}
+        {canAddNew && (
+          <button onClick={handleAdd} disabled={showAdd}>
+            &#8853; 添加新卡片
+          </button>
+        )}
+      </h2>
       <ul>
-        {children}
+        {canAddNew && showAdd && <KanbanNewCard onSubmit={handleSubmit} />}
 
         {cardList.map((item, index) => {
           return (

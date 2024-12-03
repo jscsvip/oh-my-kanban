@@ -4,8 +4,6 @@ import "./App.css";
 import React, { Children, useEffect, useState } from "react";
 import { css } from "@emotion/react";
 import KanbanBoard from "./KanbanBoard";
-import KanbanCard from "./KanbanCard";
-import KanbanNewCard from "./KanbanNewCard";
 import KanbanColumn from "./KanbanColumn";
 const DATA_STORE_KEY = "kanban-data-store";
 const COLUMN_KEY_TODO = "todo";
@@ -75,18 +73,12 @@ function App() {
     },
   ]);
 
-  const [showAdd, setShowAdd] = useState(false);
-  const handleAdd = () => {
-    setShowAdd(true);
-  };
   const handleSubmit = (title) => {
-    console.log(new Date().toLocaleString());
     setTodoList((currentTodoList) => [
       { title, status: new Date().toLocaleString() },
       ...currentTodoList,
     ]);
     // todoList.unshift({title,status: new Date().toDateString()})
-    setShowAdd(false);
   };
   const handleSaveAll = () => {
     console.log("保存所有卡片");
@@ -161,14 +153,7 @@ function App() {
           <>
             <KanbanColumn
               bgColor={COLUMN_BG_COLORS.todo}
-              title={
-                <>
-                  待处理
-                  <button onClick={handleAdd} disabled={showAdd}>
-                    &#8853; 添加新卡片
-                  </button>
-                </>
-              }
+              title="待处理"
               setDraggedItem={setDraggedItem}
               setIsDragSource={(isDragSource) =>
                 setDragSource(isDragSource ? COLUMN_KEY_TODO : null)
@@ -178,8 +163,10 @@ function App() {
               }
               onDrop={handleDrop}
               cardList={todoList}
+              onAdd={handleSubmit}
+              canAddNew={true}
             >
-              {showAdd && <KanbanNewCard onSubmit={handleSubmit} />}
+              {/* {showAdd && <KanbanNewCard onSubmit={handleSubmit} />} */}
             </KanbanColumn>
             <KanbanColumn
               bgColor={COLUMN_BG_COLORS.ongoing}
@@ -193,8 +180,7 @@ function App() {
               }
               onDrop={handleDrop}
               cardList={ongoingList}
-            >
-            </KanbanColumn>
+            ></KanbanColumn>
             <KanbanColumn
               bgColor={COLUMN_BG_COLORS.done}
               title="已完成"
@@ -207,9 +193,7 @@ function App() {
               }
               onDrop={handleDrop}
               cardList={doneList}
-            >
-              
-            </KanbanColumn>
+            ></KanbanColumn>
           </>
         )}
       </KanbanBoard>
