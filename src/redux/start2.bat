@@ -1,2 +1,2 @@
-node ./02.cardList.js
+node ./02.cardList.mjs
 pause
