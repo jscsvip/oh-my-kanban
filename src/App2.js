@@ -1,9 +1,9 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addCard, removeCard } from './store';
+import { addCard, removeCard } from './store/features/cardListSlice';
 
 export default function App() {
-  const cardList = useSelector(state => state);
+  const cardList = useSelector(state => state.cardList);
   const dispatch = useDispatch();
 
   return (
